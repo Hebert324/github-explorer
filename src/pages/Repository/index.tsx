@@ -1,15 +1,52 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouteMatch, Link } from 'react-router-dom'
-import { Header, RepositoryInfo, Issues } from './styles'
+import { Header, RepositoryInfo, Commits } from './styles'
 import logoImg from '../../assets/logo.svg'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
+import api from '../../services/api'
 
 interface RepositoryParams {
     repository: string;
 }
 
+interface RepositoryInterface {
+    full_name: string
+    description: string
+    stargazers_count: number
+    forks_count: number
+    open_issues_count: number
+    owner: {
+        login: string
+        avatar_url: string
+    }
+}
+
+interface Commit {
+    html_url: string
+    node_id: number
+    commit: {
+        message: string
+    }
+    author: {
+        login: string
+    }
+}
+
 const Repository: React.FC = () => {
+    const [repository, setRepository] = useState<RepositoryInterface | null>(null)
+    const [commits, setCommits] = useState<Commit[]>([])
+
     const { params } = useRouteMatch<RepositoryParams>()
+
+    useEffect(() => {
+        api.get(`repos/${params.repository}`).then(response => {
+            setRepository(response.data)
+        })
+
+        api.get(`repos/${params.repository}/commits`).then(response => {
+            setCommits(response.data)
+        })
+    }, [params.repository])
 
     return (
     <>
@@ -22,42 +59,47 @@ const Repository: React.FC = () => {
             </Link>
         </Header>
 
+        {repository && (
         <RepositoryInfo>
             <header>
-                <img src="https://avatars.githubusercontent.com/u/70274409?v=4" alt="Hebert Rocha" />
+                <img src={repository.owner.avatar_url} alt={repository.owner.login} />
                 <div>
-                    <strong>Hebert324/portifolio</strong>
-                    <p>descrição do repositório</p>
+                    <strong>{repository.full_name}</strong>
+                    <p>{repository.description}</p>
                 </div>
             </header>
 
             <ul>
                 <li>
-                    <strong>1808</strong>
+                    <strong>{repository.stargazers_count}</strong>
                     <span>Starts</span>
                 </li>
                 <li>
-                    <strong>48</strong>
+                    <strong>{repository.forks_count}</strong>
                     <span>Forks</span>
                 </li>
                 <li>
-                    <strong>67</strong>
+                    <strong>{repository.open_issues_count}</strong>
                     <span>Issues abertas</span>
                 </li>
             </ul>
         </RepositoryInfo>
+        )}
 
-        <Issues>
-        <Link to='adada'>
+        <Commits>
+            <header>Commits:</header>
+            {commits.map(commit => (
+                <a target='_blank' rel='noreferrer' key={commit.node_id} href={commit.html_url}>
 
-            <div>
-                <strong>aaaa</strong>
-                <p>aaa</p>
-            </div>
+                <div>
+                    <strong>{commit.author.login}</strong>
+                    <p>{commit.commit.message}</p>
+                </div>
 
-            <FiChevronRight size={20} />
-        </Link>
-        </Issues>
+                <FiChevronRight size={20} />
+            </a>
+            ))}
+        </Commits>
     </>
     )
 }

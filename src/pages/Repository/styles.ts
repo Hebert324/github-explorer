@@ -76,8 +76,15 @@ export const RepositoryInfo = styled.section`
     }
 `
 
-export const Issues = styled.div`
-    margin-top: 80px;
+export const Commits = styled.div`
+    margin-top: 60px;
+
+    header {
+        font-size: 36px;
+        color: #3d3d4d;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
 
     a {
         background: #fff;
