@@ -14,6 +14,10 @@ Github explorer e um website para encontrar informações sobre repositórios do
 
 ### Acesse o projeto aqui: <a href="https://github-explorer-web.netlify.app/">Github Explorer</a>
 
+## :memo: Licença
+
+Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](.github/LICENSE.md) para mais detalhes.
+
 ---
 
-Desenvolvido por [Hebert Rocha](https://www.linkedin.com/in/hebert-rc/) juntamente a [Rocketseat](https://app.rocketseat.com.br/dashboard) :wave: 
+Desenvolvido por [Hebert Rocha](https://www.linkedin.com/in/hebert-rc/) juntamente a [Rocketseat](https://app.rocketseat.com.br/dashboard) :wave:
